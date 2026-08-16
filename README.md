@@ -1,5 +1,6 @@
 ﻿# Testownik UE
-# Użyte rzeczy
+  TestownikUE to aplikacja, która pomaga w przygotowaniu do nadchodzącego kolokwium lub testu. Projekt zaliczeniowy z przedmiotu *"Programowanie w technologii .NET"*.
+# Wykorzystane elementy
 - https://avaloniaui.github.io/icons.html
 - https://commons.wikimedia.org/wiki/File:Crown_of_Stefan_the_First.svg
 - https://uxwing.com/ab-testing-icon/
@@ -32,6 +33,3 @@
 ]
 ```
 ... i tak dalej
-# Aplikacja zapisuje dane do appdata
-- zestawy i progres: testownik.db
-- ustawienia użytkownika: usersettings.db
