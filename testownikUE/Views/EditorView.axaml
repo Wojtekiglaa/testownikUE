@@ -1,0 +1,118 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Name="Root"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="testownikUE.Views.EditorView"
+             x:CompileBindings="False">
+    <Grid RowDefinitions="Auto,Auto,Auto,*" Margin="12">
+        <StackPanel Grid.Row="0" Spacing="6">
+            <TextBlock HorizontalAlignment="Center" FontSize="28" Text="Edytor zestawu" />
+            <TextBlock HorizontalAlignment="Center" Text="{Binding ModeLabel}" Foreground="Gray" />
+        </StackPanel>
+
+        <!-- UI Edytora -->
+        <Border Grid.Row="1" Margin="0,10,0,10" Padding="10" BorderBrush="LightGray" BorderThickness="1" CornerRadius="6">
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="8" RowSpacing="8">
+                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Nazwa:" />
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SetName}" Watermark="Nazwa zestawu" />
+                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Autor:" />
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SetAuthor}" Watermark="Autor" />
+
+                <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" Margin="8,0,0,0" Command="{Binding SaveSetCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <PathIcon Data="{StaticResource save_regular}" Width="14" Height="14" />
+                        <TextBlock Text="Zapisz do bazy" />
+                    </StackPanel>
+                </Button>
+
+                <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="3" Margin="8,0,0,0" Command="{Binding GoBackCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <PathIcon Data="{StaticResource gobackarrow_regular}" Width="14" Height="14" />
+                        <TextBlock Text="Wróć" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Border>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="8" Margin="0,0,0,8">
+            <TextBox Width="360" Text="{Binding SearchText}" Watermark="Szukaj po pytaniu lub odpowiedzi" />
+            <Button Command="{Binding AddQuestionCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <PathIcon Data="{StaticResource add_square_regular}" Width="14" Height="14" />
+                    <TextBlock Text="Dodaj pytanie" />
+                </StackPanel>
+            </Button>
+            <TextBlock VerticalAlignment="Center" Foreground="DarkGreen" Text="{Binding StatusMessage}" />
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="3">
+            <ItemsControl ItemsSource="{Binding FilteredQuestions}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0,0,0,10" Padding="10" BorderBrush="LightGray" BorderThickness="1" CornerRadius="6">
+                            <StackPanel Spacing="8">
+                                <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="6">
+                                    <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{Binding DisplayOrder}" />
+                                    <TextBox Grid.Column="1" Text="{Binding Text}" Watermark="Treść pytania" />
+                                    <Button Grid.Column="2"
+                                            Command="{Binding #Root.DataContext.MoveQuestionUpCommand}"
+                                            CommandParameter="{Binding .}">
+                                        <PathIcon Data="{StaticResource arrow_curve_up_right_regular}" Width="14" Height="14" />
+                                    </Button>
+                                    <Button Grid.Column="3"
+                                            Command="{Binding #Root.DataContext.MoveQuestionDownCommand}"
+                                            CommandParameter="{Binding .}">
+                                        <PathIcon Data="{StaticResource arrow_curve_down_right_regular}" Width="14" Height="14" />
+                                    </Button>
+                                    <Button Grid.Column="4"
+                                            Command="{Binding #Root.DataContext.RemoveQuestionCommand}"
+                                            CommandParameter="{Binding .}">
+                                        <PathIcon Data="{StaticResource delete_regular}" Width="14" Height="14" />
+                                    </Button>
+                                </Grid>
+
+                                <ItemsControl ItemsSource="{Binding Answers}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto,Auto" ColumnSpacing="6" Margin="8,0,0,0">
+                                                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{Binding Key}" />
+                                                <TextBox Grid.Column="1" Text="{Binding Text}" Watermark="Treść odpowiedzi" />
+                                                <CheckBox Grid.Column="2" VerticalAlignment="Center" IsChecked="{Binding IsCorrect}" Content="Poprawna" />
+                                                <Button Grid.Column="3"
+                                                        Command="{Binding #Root.DataContext.MoveAnswerUpCommand}"
+                                                        CommandParameter="{Binding .}">
+                                                    <PathIcon Data="{StaticResource arrow_curve_up_right_regular}" Width="14" Height="14" />
+                                                </Button>
+                                                <Button Grid.Column="4"
+                                                        Command="{Binding #Root.DataContext.MoveAnswerDownCommand}"
+                                                        CommandParameter="{Binding .}">
+                                                    <PathIcon Data="{StaticResource arrow_curve_down_right_regular}" Width="14" Height="14" />
+                                                </Button>
+                                                <Button Grid.Column="5"
+                                                        Command="{Binding #Root.DataContext.RemoveAnswerCommand}"
+                                                        CommandParameter="{Binding .}">
+                                                    <PathIcon Data="{StaticResource delete_regular}" Width="14" Height="14" />
+                                                </Button>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <Button HorizontalAlignment="Left"
+                                        Command="{Binding #Root.DataContext.AddAnswerCommand}"
+                                        CommandParameter="{Binding .}">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <PathIcon Data="{StaticResource add_square_regular}" Width="14" Height="14" />
+                                        <TextBlock Text="Dodaj odpowiedź" />
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

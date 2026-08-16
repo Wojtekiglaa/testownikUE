@@ -1,0 +1,42 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:testownikUE.ViewModels"
+             x:DataType="vm:SettingsMenuViewModel"
+             mc:Ignorable="d" d:DesignWidth="1280" d:DesignHeight="450"
+             x:Class="testownikUE.Views.SettingsMenuView">
+    <StackPanel>
+        
+        <TextBlock HorizontalAlignment="Center" Margin="10" FontSize="32" Text="Ustawienia aplikacji" />
+        <StackPanel Margin="10" Spacing="8">
+            <TextBlock FontStyle="Italic">LICZBA DODATKOWYCH POWTÓRZEŃ PRZY BŁĘDNEJ ODPOWIEDZI</TextBlock>
+            <NumericUpDown Value="{Binding WrongAnswerPenalty}" Increment="1" HorizontalAlignment="Left"
+                           FormatString="0"
+                           Minimum="0" Maximum="10"/>
+            <TextBlock FontStyle="Italic">WSTĘPNA LICZBA POWTÓRZEŃ</TextBlock>
+            <NumericUpDown Value="{Binding InitialRepetitions}" Increment="1" HorizontalAlignment="Left"
+                           FormatString="0"
+                           Minimum="1" Maximum="10"/>
+            <TextBlock FontStyle="Italic">MAKSYMALNA LICZBA POWTÓRZEŃ</TextBlock>
+            <NumericUpDown Value="{Binding MaxRepetitions}" Increment="1" HorizontalAlignment="Left"
+                           FormatString="0"
+                           Minimum="1" Maximum="10"/>
+
+            <Button HorizontalAlignment="Center" Command="{Binding SaveSettingsCommand}" Margin="10">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <PathIcon Data="{StaticResource save_regular}" Width="16" Height="16" />
+                    <TextBlock FontWeight="Bold" TextDecorations="Underline" Text="Zapisz ustawienia" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+            
+        </StackPanel>
+        <Button HorizontalAlignment="Center" Margin="10" Command="{Binding GoBackCommand}">
+                  <StackPanel Orientation="Horizontal" Spacing="8">
+                      <PathIcon Data="{StaticResource gobackarrow_regular}" Width="16" Height="16" />
+                      <TextBlock Text="Wróć do menu głównego" VerticalAlignment="Center" />
+                  </StackPanel>  
+            
+        </Button>
+    </StackPanel>
+</UserControl>

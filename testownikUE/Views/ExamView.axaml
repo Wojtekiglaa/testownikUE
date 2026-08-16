@@ -1,0 +1,286 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:testownikUE.ViewModels"
+             xmlns:animation="clr-namespace:Avalonia.Animation;assembly=Avalonia.Base"
+             xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+             x:DataType="vm:ExamViewModel"
+             x:Name="Root"
+             mc:Ignorable="d" d:DesignWidth="1280" d:DesignHeight="500"
+             Focusable="True"
+             x:Class="testownikUE.Views.ExamView">
+    <Grid ColumnDefinitions="*,320" >
+        <Grid RowDefinitions="Auto,Auto,*,Auto" Margin="32,24,24,24">
+            <Button Grid.Row="0"
+                    HorizontalAlignment="Left"
+                    Command="{Binding GoBackCommand}"
+                    Padding="10,6"
+                    Background="#7F1D1D"
+                    Foreground="White"
+                    BorderBrush="#450A0A"
+                    BorderThickness="1">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <PathIcon Data="{StaticResource gobackarrow_regular}" Width="14" Height="14" Foreground="White" />
+                    <TextBlock Text="Wyjdź" VerticalAlignment="Center" Foreground="White" />
+                </StackPanel>
+            </Button>
+            <TransitioningContentControl Grid.Row="1"
+                                        Content="{Binding QuestionText}"
+                                        Margin="0,18,0,18"
+                                         Foreground="DarkCyan"
+                                        FontSize="42"
+                                        FontWeight="SemiBold">
+                <TransitioningContentControl.ContentTemplate>
+                    <DataTemplate x:CompileBindings="False">
+                        <TextBlock Text="{Binding .}"
+                                   TextWrapping="Wrap"
+                                   MaxWidth="980"
+                                   TextAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                    </DataTemplate>
+                </TransitioningContentControl.ContentTemplate>
+                <TransitioningContentControl.PageTransition>
+                    <animation:CrossFade Duration="0:0:0.10" />
+                </TransitioningContentControl.PageTransition>
+            </TransitioningContentControl>
+            <Border Grid.Row="2" HorizontalAlignment="Center" Width="980">
+                <Grid>
+                    <ItemsControl x:Name="AnswersList"
+                                  ItemsSource="{Binding CurrentAnswers}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="2"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+            
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:AnswerOptionViewModel">
+                                <ToggleButton Margin="8"
+                                              MinHeight="92"
+                                              Width="470"
+                                              CornerRadius="12"
+                                              HorizontalAlignment="Center"
+                                              IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                              Background="{Binding BackgroundBrush, FallbackValue=#F8FAFC, TargetNullValue=#F8FAFC}"
+                                              BorderBrush="{Binding BorderBrush, FallbackValue=#CBD5E1, TargetNullValue=#CBD5E1}"
+                                              Foreground="{Binding TextBrush, FallbackValue=Black, TargetNullValue=Black}"
+                                              IsHitTestVisible="{Binding IsInteractive}"
+                                              Focusable="{Binding IsInteractive}"
+                                              BorderThickness="1.5">
+                                    <ToggleButton.Styles>
+                                        <Style Selector="ToggleButton:checked /template/ ContentPresenter#PART_ContentPresenter">
+                                            <Setter Property="Background" Value="{Binding BackgroundBrush, FallbackValue=#F8FAFC, TargetNullValue=#F8FAFC}" />
+                                            <Setter Property="BorderBrush" Value="{Binding BorderBrush, FallbackValue=#CBD5E1, TargetNullValue=#CBD5E1}" />
+                                        </Style>
+                                        <Style Selector="ToggleButton:disabled /template/ ContentPresenter#PART_ContentPresenter">
+                                            <Setter Property="Background" Value="{Binding BackgroundBrush, FallbackValue=#F8FAFC, TargetNullValue=#F8FAFC}" />
+                                            <Setter Property="BorderBrush" Value="{Binding BorderBrush, FallbackValue=#CBD5E1, TargetNullValue=#CBD5E1}" />
+                                        </Style>
+                                        <Style Selector="ToggleButton:disabled:checked /template/ ContentPresenter#PART_ContentPresenter">
+                                            <Setter Property="Background" Value="{Binding BackgroundBrush, FallbackValue=#F8FAFC, TargetNullValue=#F8FAFC}" />
+                                            <Setter Property="BorderBrush" Value="{Binding BorderBrush, FallbackValue=#CBD5E1, TargetNullValue=#CBD5E1}" />
+                                        </Style>
+                                        <Style Selector="ToggleButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                                            <Setter Property="Background" Value="#DBEAFE" />
+                                            <Setter Property="BorderBrush" Value="#60A5FA" />
+                                        </Style>
+                                    </ToggleButton.Styles>
+                                    <Grid ColumnDefinitions="44,*"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center">
+                                        <TextBlock Grid.Column="0"
+                                                   Text="{Binding Key}"
+                                                   FontSize="24"
+                                                   FontWeight="Bold"
+                                                   HorizontalAlignment="Center"
+                                                   Foreground="{Binding TextBrush, FallbackValue=Black, TargetNullValue=Black}" />
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding Text}"
+                                                   FontSize="24"
+                                                   FontWeight="SemiBold"
+                                                   HorizontalAlignment="Left"
+                                                   TextWrapping="Wrap"
+                                                   Foreground="{Binding TextBrush, FallbackValue=Black, TargetNullValue=Black}" />
+                                    </Grid>
+                                </ToggleButton>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <Border Padding="24"
+                            Margin="20"
+                            Background="Navy"
+                            CornerRadius="20"
+                            Opacity="{Binding FinalOverlayOpacity}"
+                            IsHitTestVisible="{Binding IsFinalOverlayHitTestVisible}">
+                        <Border.Transitions>
+                            <Transitions>
+                                <DoubleTransition Property="Opacity" Duration="0:0:0.28" />
+                            </Transitions>
+                        </Border.Transitions>
+                        <StackPanel Spacing="10">
+                            <Svg Path="/Assets/crown.svg" Width="200" Height="200"/>
+                            <TextBlock Text="Raport końcowy"
+                                       Foreground="White"
+                                       FontSize="24"
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Center" />
+                            <TextBlock Text="{Binding FinalMasteryText}" Foreground="#22C55E" FontSize="18" HorizontalAlignment="Center" />
+                            <TextBlock Text="{Binding FinalAccuracyText}" Foreground="#22C55E" FontSize="18" HorizontalAlignment="Center" />
+                            <TextBlock Text="{Binding FinalTotalsText}" Foreground="White" TextWrapping="Wrap" HorizontalAlignment="Center" />
+                            <lvc:CartesianChart Height="240"
+                                                Series="{Binding FinalReportSeries}"
+                                                XAxes="{Binding FinalReportXAxes}" />
+                            <Button
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding GoBackCommand}"
+                                    Padding="10,6"
+                                    Background="#7F1D1D"
+                                    Foreground="White"
+                                    BorderBrush="Red"
+                                    BorderThickness="1">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <PathIcon Data="{StaticResource gobackarrow_regular}" Width="14" Height="14" Foreground="White" />
+                                    <TextBlock Text="Wróć do menu głównego" VerticalAlignment="Center" Foreground="White" />
+                                </StackPanel>
+                            </Button>
+                            
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+            
+            <Grid Grid.Row="3" Margin="0,20,0,0" ColumnDefinitions="Auto,*" HorizontalAlignment="Center">
+                <Border Background="CornflowerBlue" Padding="16,8" CornerRadius="999" Margin="0,0,12,0">
+                    <TextBlock Text="{Binding SourceLabel}" />
+                </Border>
+                <Border Grid.Column="1" Background="CornflowerBlue" Padding="16,8" CornerRadius="999">
+                    <TextBlock TextWrapping="Wrap">
+                        <Run Text="Autor:" />
+                        <Run Text="{Binding SetAuthor}" Foreground="Crimson" FontWeight="Bold" FontStyle="Italic"/>
+                    </TextBlock>
+                </Border>
+                
+        </Grid>
+        </Grid>
+
+        <Border Grid.Column="1"  Padding="40">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#3B82F6" Offset="0" />
+                    <GradientStop Color="#2563EB" Offset="1" />
+                </LinearGradientBrush>
+            </Border.Background>
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,*,Auto,Auto">
+                <TextBlock Grid.Row="0"
+                           Text="Udzielone odpowiedzi"
+                           Foreground="White"
+                           FontSize="16"
+                           FontWeight="SemiBold" />
+                <ProgressBar Grid.Row="1"
+                             Margin="0,0,0,4"
+                             Minimum="0"
+                             Maximum="{Binding SubmittedAnswersCount}"
+                             Value="{Binding CorrectAnswersCount}"
+                             Height="8"
+                             Background="#991B1B"
+                             Foreground="#22C55E">
+                    <ProgressBar.Transitions>
+                        <Transitions>
+                            <DoubleTransition Property="Value" Duration="0:0:0.30" />
+                        </Transitions>
+                    </ProgressBar.Transitions>
+                </ProgressBar>
+                <Grid Grid.Row="1" Margin="0,25,0,0" ColumnDefinitions="Auto,*,Auto">
+                    <TextBlock Grid.Column="0"
+                               Text="{Binding CorrectAnswersCount}"
+                               Foreground="White"
+                               FontWeight="SemiBold"
+                               HorizontalAlignment="Left" />
+                    <TextBlock Grid.Column="2"
+                               Text="{Binding IncorrectAnswersCount}"
+                               Foreground="White"
+                               FontWeight="SemiBold"
+                               HorizontalAlignment="Right" />
+                </Grid>
+                <TextBlock Grid.Row="2"
+                           Margin="0,26,0,0"
+                           Text="Opanowane pytania"
+                           Foreground="White"
+                           FontSize="16"
+                           FontWeight="SemiBold" />
+                <ProgressBar Grid.Row="3"
+                             Margin="0,0,0,4"
+                             Minimum="0"
+                             Maximum="{Binding TotalQuestions}"
+                             Value="{Binding Score}"
+                             Height="8"
+                             Foreground="White">
+                    <ProgressBar.Transitions>
+                        <Transitions>
+                            <DoubleTransition Property="Value" Duration="0:0:0.30" />
+                        </Transitions>
+                    </ProgressBar.Transitions>
+                </ProgressBar>
+                <TextBlock Grid.Row="3"
+                           Margin="0,25,0,0"
+                           HorizontalAlignment="Center"
+                           Foreground="White">
+                    <Run Text="{Binding Score}" />
+                    <Run Text="/" />
+                    <Run Text="{Binding TotalQuestions}" />
+                </TextBlock>
+                <StackPanel Grid.Row="4" Margin="0,26,0,0" Spacing="4">
+                    <TextBlock Text="Liczba pytań w zestawie" Foreground="White" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Left" />
+                    <TextBlock Text="{Binding TotalQuestions}" HorizontalAlignment="Center" Foreground="#22C55E" FontSize="46" FontWeight="Bold" />
+                    <TextBlock Margin="0,12,0,0" Text="Czas nauki" Foreground="White" FontSize="16" FontWeight="SemiBold" />
+                    <TextBlock Text="{Binding StudyTimeText}" Foreground="#22C55E" FontSize="46" FontWeight="Bold" />  
+                </StackPanel>
+
+                <StackPanel Grid.Row="6"
+                            Margin="0,16,0,0"
+                            Orientation="Horizontal"
+                            Spacing="16"
+                            HorizontalAlignment="Center">
+                    <Button Command="{Binding SaveProgressCommand}" BorderBrush="Red">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <PathIcon Data="{StaticResource save_regular}" Width="16" Height="16" />
+                            <TextBlock Text="Zapisz" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding SubmitSelectedAnswersCommand}"
+                            BorderThickness="1.4"
+                            IsEnabled="{Binding CanSubmitSelection}"
+                            Width="44"
+                            Height="44"
+                            CornerRadius="999"
+                            Background="#22C55E"
+                            Foreground="White"
+                            BorderBrush="Red"
+                            ToolTip.Tip="Zatwierdź odpowiedź (Enter lub Spacja)">
+                        <PathIcon Data="{StaticResource checkmark_regular}" Width="18" Height="18"/>
+                    </Button>
+                </StackPanel>
+
+                <!-- Tutaj też binding do isDebug -->
+                <Border Grid.Row="5" Margin="0,12,0,0" Background="#1E3A8A" Padding="10" CornerRadius="8" IsVisible="{Binding IsDebug}">
+                    <TextBlock Text="{Binding SrDebugText}"
+                               Foreground="#D1FAE5"
+                               FontSize="11"
+                               TextWrapping="Wrap"
+                               IsVisible="{Binding IsDebug}"/>
+                </Border>
+                
+                
+                
+                
+            </Grid>
+        </Border>
+
+
+    </Grid>
+        
+        
+        
+</UserControl>

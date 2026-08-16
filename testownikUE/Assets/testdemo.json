@@ -1,0 +1,25 @@
+[
+  {
+    "questionId": 1,
+    "questionAuthor": "example",
+    "question": "Pytanie 1",
+    "answers": {
+      "a": "Odpowiedź a",
+      "b": "Odpowiedź b",
+      "c": "Odpowiedź c",
+      "d": "Odpowiedź d - poprawna"
+    },
+    "correctAnswers": "d"
+  },
+  {
+    "questionId": 2,
+    "questionAuthor": "example",
+    "question": "Pytanie 2",
+    "answers": {
+      "a": "Odpowiedź a - poprawna",
+      "b": "Odpowiedź b",
+      "c": "Odpowiedź c - poprawna"
+    },
+    "correctAnswers": ["c", "a"]
+  }
+]

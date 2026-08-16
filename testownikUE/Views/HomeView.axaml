@@ -1,0 +1,127 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:testownikUE.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignWidth="1280"
+             d:DesignHeight="450"
+             x:Class="testownikUE.Views.HomeView"
+             x:Name="Root"
+             x:DataType="vm:HomeViewViewModel">
+    <StackPanel>
+        <TextBlock HorizontalAlignment="Center" Margin="10" FontSize="32" Text="TestownikUE" />
+        <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Margin="10" FontSize="16" Text="W tej aplikacji możesz przygotować się na nadchodzące kolokwium lub egzamin!" />
+        <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+            <Button HorizontalAlignment="Center" Margin="10" Command="{Binding NewSetCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                     <PathIcon Data="{StaticResource add_square_regular}" Width="16" Height="16" />
+                    <TextBlock Text="Utwórz nowy zestaw" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+            <Button HorizontalAlignment="Center" Margin="10" Command="{Binding OpenSetCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                     <PathIcon Data="{StaticResource folder_open_regular}" Width="16" Height="16" />
+                    <TextBlock Text="Otwórz zestaw" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+            <Button HorizontalAlignment="Center" Margin="10" Command="{Binding EditSetCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <PathIcon Data="{StaticResource drafts_regular}" Width="16" Height="16" />
+                    <TextBlock Text="Edytuj zestawy w bazie" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+            <Button HorizontalAlignment="Center" Margin="10" Command="{Binding NavigateToSettingsViewCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <PathIcon Data="{StaticResource settingsicon_regular}" Width="16" Height="16" />
+                    <TextBlock Text="Ustawienia" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+            <Button HorizontalAlignment="Center" Margin="10" Command="{Binding ShowGlobalStatsCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <PathIcon Data="{StaticResource globe_regular}" Width="16" Height="16" />
+                    <TextBlock Text="Statystyki globalne" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+        <!-- Tutaj robimy binding czy pojawiaja się opcje debug -->
+        <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center" IsVisible="{Binding IsDebug}">
+            <Button HorizontalAlignment="Center" Margin="10" Command="{Binding PrintDbCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <PathIcon Data="{StaticResource bug_regular}" Width="16" Height="16" />
+                    <TextBlock Text="DEBUG print co jest w db" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+            <Button HorizontalAlignment="Center" Margin="10" Command="{Binding ClearDbCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <PathIcon Data="{StaticResource bug_regular}" Width="16" Height="16" />
+                    <TextBlock Text="DEBUG clear db" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+            <Button HorizontalAlignment="Center" Margin="10" Command="{Binding ToggleThemeCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <PathIcon Data="{StaticResource bug_regular}" Width="16" Height="16" />
+                    <TextBlock Text="DEBUG toggle light/dark" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+        <Border Margin="16" Padding="12" CornerRadius="8" BorderBrush="LightGray" BorderThickness="1">
+            <StackPanel Spacing="8">
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                    <TextBlock Grid.Column="0" Text="Zestawy zapisane w bazie danych" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center" />
+                    <Button Grid.Column="1" Command="{Binding SearchSetCommand}">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <PathIcon Data="{StaticResource folder_open_regular}" Width="14" Height="14" />
+                            <TextBlock Text="Szukaj zestawu" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                </Grid>
+                <ItemsControl ItemsSource="{Binding SetsInDb}" x:CompileBindings="False">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:CompileBindings="False">
+                            <Grid ColumnDefinitions="*,Auto,Auto,Auto" Margin="0,2">
+                                <TextBlock Grid.Column="0" Text="{Binding DisplayLabel}" VerticalAlignment="Center" />
+                                <Button Grid.Column="1"
+                                        Click="OpenSetInDb_Click">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <PathIcon Data="{StaticResource folder_open_regular}" Width="14" Height="14" />
+                                        <TextBlock Text="Otwórz" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Button>
+                                <Button Grid.Column="2"
+                                        Margin="6,0,0,0"
+                                        Click="EditSetInDb_Click">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <PathIcon Data="{StaticResource drafts_regular}" Width="14" Height="14" />
+                                        <TextBlock Text="Edytuj" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Button>
+                                <Button Grid.Column="3"
+                                        Margin="6,0,0,0"
+                                        Click="DeleteSetInDb_Click">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <PathIcon Data="{StaticResource delete_regular}" Width="14" Height="14" />
+                                        <TextBlock Text="Usuń" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Border>
+        <Expander Header="Informacje o systemie"
+                  Margin="16,8,16,0"
+                  HorizontalAlignment="Center"
+                  IsVisible="{Binding IsDebug}">
+            <Border Margin="0,8,0,0" Padding="10" BorderBrush="LightGray" BorderThickness="1" CornerRadius="6">
+                <ScrollViewer MaxHeight="220" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled">
+                    <!-- Scrollbar visibility bloknięty, bo jednak nie potrzeba scrollować -->
+                    <SelectableTextBlock Text="{Binding DebugInfo}" TextWrapping="Wrap" />
+                </ScrollViewer>
+            </Border>
+        </Expander>
+    </StackPanel>
+</UserControl>
